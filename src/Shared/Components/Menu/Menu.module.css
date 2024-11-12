@@ -1,0 +1,28 @@
+.menuContainer {
+    @apply absolute px-5 py-1 flex justify-between w-1/4 left-1/2 top-10 rounded-md;
+    border: 1px solid theme('colors.border1');
+    transform: translateX(-50%);
+    box-shadow: theme('colors.shadow1');
+    background-color: theme('colors.background1');
+}
+    
+.menuContainer .iconWrapper {
+    @apply cursor-pointer flex justify-center items-center p-2 h-9 w-9 rounded-md;
+}
+
+.menuContainer .iconWrapper:hover,
+.menuContainer .iconWrapper.active {
+    background-color: theme('colors.text2');
+}
+
+.menuContainer .iconWrapper .icon {
+    color: theme('colors.text1');
+    /* font-size: 20px; */
+}
+
+/* Responsive styles */
+@media screen and (max-width: 640px) {
+    .menuContainer {
+        @apply w-3/4;
+    }
+}
