@@ -1,8 +1,9 @@
-import { Menu } from "@/Shared"
+import { Menu, Toolbox } from "@/Shared"
 
 const Home = () => {
   return <>
     <Menu />
+    <Toolbox />
   </>
 }
 
