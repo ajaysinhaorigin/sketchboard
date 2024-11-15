@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
-import "./globals.css"
+import "../Shared/Styles/globals.css"
+import { StoreProvider } from "@/Shared"
 
 export const metadata: Metadata = {
   title: "Sketchbook | Online drawing tool",
@@ -12,10 +13,12 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
-      <body>
-        <main>{children}</main>
-      </body>
-    </html>
+    <StoreProvider>
+      <html lang="en">
+        <body>
+          <main>{children}</main>
+        </body>
+      </html>
+    </StoreProvider>
   )
 }
