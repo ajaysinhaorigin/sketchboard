@@ -7,6 +7,9 @@ import { useDispatch, useSelector } from "react-redux"
 const Board = () => {
   const dispatch = useDispatch()
   const canvasRef: any = useRef(null)
+  const drawHistory: any = useRef([])
+  const historyPointer: any = useRef(0)
+
   const shouldDraw = useRef(false)
   const { activeMenuItem, actionMenuItem } = useSelector(
     (state: any) => state.menu
@@ -41,8 +44,23 @@ const Board = () => {
         anchor.download = "sketch.jpg"
         anchor.click()
       }
-      dispatch(actionItemClick(null))
+    } else if (
+      actionMenuItem === MENU_ITEMS.UNDO ||
+      actionMenuItem === MENU_ITEMS.REDO
+    ) {
+      if (historyPointer.current > 0 && actionMenuItem === MENU_ITEMS.UNDO)
+        historyPointer.current -= 1
+      if (
+        historyPointer.current < drawHistory.current.length - 1 &&
+        actionMenuItem === MENU_ITEMS.REDO
+      )
+        historyPointer.current += 1
+
+      const imageData = drawHistory.current[historyPointer.current]
+      if (!imageData || Boolean(!drawHistory.current)) return
+      context.putImageData(imageData, 0, 0)
     }
+    dispatch(actionItemClick(null))
   }, [actionMenuItem, dispatch])
 
   useEffect(() => {
@@ -86,6 +104,9 @@ const Board = () => {
     }
     const handleMouseUp = () => {
       shouldDraw.current = false
+      const imageData = context.getImageData(0, 0, canvas.width, canvas.height)
+      drawHistory.current.push(imageData)
+      historyPointer.current = drawHistory.current.length - 1
     }
 
     canvas.addEventListener("mousedown", handleMouseDown)
