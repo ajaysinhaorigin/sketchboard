@@ -1,14 +1,14 @@
 "use client"
 import { COLORS, MENU_ITEMS } from "@/Shared/Constants"
 import { actionItemClick } from "@/Shared/Slice"
-import { useEffect, useLayoutEffect, useRef } from "react"
+import { MutableRefObject, useEffect, useLayoutEffect, useRef } from "react"
 import { useDispatch, useSelector } from "react-redux"
 
 const Board = () => {
   const dispatch = useDispatch()
   const canvasRef: any = useRef(null)
-  const drawHistory: any = useRef([])
-  const historyPointer: any = useRef(0)
+  const drawHistory: MutableRefObject<ImageData[]> = useRef([])
+  const historyPointer = useRef(0)
 
   const shouldDraw = useRef(false)
   const { activeMenuItem, actionMenuItem } = useSelector(
@@ -104,7 +104,13 @@ const Board = () => {
     }
     const handleMouseUp = () => {
       shouldDraw.current = false
-      const imageData = context.getImageData(0, 0, canvas.width, canvas.height)
+      const imageData: ImageData = context.getImageData(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+      )
+      console.log("imageData", imageData)
       drawHistory.current.push(imageData)
       historyPointer.current = drawHistory.current.length - 1
     }

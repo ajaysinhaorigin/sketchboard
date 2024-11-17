@@ -12,15 +12,18 @@ import classes from "classnames"
 import { useDispatch, useSelector } from "react-redux"
 import { actionItemClick, menuItemClick } from "@/Shared/Slice"
 import { MENU_ITEMS } from "@/Shared/Constants"
+import { RootState } from "@/Shared/Stores/store"
 
 const Menu = () => {
   const dispatch = useDispatch()
-  const activeMenuItem = useSelector((state: any) => state.menu?.activeMenuItem)
-  const handleMenuClick = (itemName: any) => {
+  const activeMenuItem = useSelector(
+    (state: RootState) => state.menu.activeMenuItem
+  )
+  const handleMenuClick = (itemName: string) => {
     dispatch(menuItemClick(itemName))
   }
 
-  const handleActioItemClick = (itemName: any) => {
+  const handleActioItemClick = (itemName: string) => {
     dispatch(actionItemClick(itemName))
   }
 
