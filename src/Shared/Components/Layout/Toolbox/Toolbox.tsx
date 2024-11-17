@@ -4,24 +4,40 @@ import styles from "./Toolbox.module.css"
 import classes from "classnames"
 import { useDispatch, useSelector } from "react-redux"
 import { changeBrushSize, changeColor } from "@/Shared/Slice"
+import { ChangeEvent } from "react"
+import { RootState } from "@/Shared/Stores/store"
+import { IToolboxState } from "@/Shared/Interfaces"
 
 const Toolbox = () => {
   const dispatch = useDispatch()
-  const activeMenuItem = useSelector((state: any) => state.menu?.activeMenuItem)
+  const activeMenuItem = useSelector(
+    (state: RootState) => state.menu.activeMenuItem
+  )
   const showStrokeToolOption = activeMenuItem === MENU_ITEMS.PENCIL
   const showBrushToolOption =
     activeMenuItem === MENU_ITEMS.PENCIL || activeMenuItem === MENU_ITEMS.ERASER
   const { color, size } = useSelector(
-    (state: any) => state.toolbox[activeMenuItem]
+    (state: RootState) => state.toolbox[activeMenuItem as keyof IToolboxState]
   )
 
-  const updateBrushSize = (e: any) => {
-    dispatch(changeBrushSize({ item: activeMenuItem, size: e.target.value }))
+  const updateBrushSize = (e: ChangeEvent<HTMLInputElement>) => {
+    console.log("e.target.value", e.target.value)
+    dispatch(
+      changeBrushSize({
+        item: activeMenuItem as keyof IToolboxState,
+        size: Number(e.target.value),
+      })
+    )
     // socket.emit('changeConfig', {color, size: e.target.value })
   }
 
-  const updateColor = (newColor: any) => {
-    dispatch(changeColor({ item: activeMenuItem, color: newColor }))
+  const updateColor = (newColor: string) => {
+    dispatch(
+      changeColor({
+        item: activeMenuItem as keyof IToolboxState,
+        color: newColor,
+      })
+    )
     // socket.emit('changeConfig', {color: newColor, size })
   }
 
