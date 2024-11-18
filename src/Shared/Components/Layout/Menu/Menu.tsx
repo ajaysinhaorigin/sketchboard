@@ -6,6 +6,7 @@ import {
   faRotateLeft,
   faRotateRight,
   faFileArrowDown,
+  faTrash
 } from "@fortawesome/free-solid-svg-icons"
 import styles from "./Menu.module.css"
 import classes from "classnames"
@@ -56,6 +57,12 @@ const Menu = () => {
         onClick={() => handleActioItemClick(MENU_ITEMS.REDO)}
       >
         <FontAwesomeIcon icon={faRotateRight} className={styles.icon} />
+      </div>
+      <div
+        className={styles.iconWrapper}
+        onClick={() => handleActioItemClick(MENU_ITEMS.CLEAR)}
+      >
+        <FontAwesomeIcon icon={faTrash} className={styles.icon} />
       </div>
       <div
         className={styles.iconWrapper}

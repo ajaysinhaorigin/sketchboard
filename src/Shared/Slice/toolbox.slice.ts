@@ -14,6 +14,7 @@ const initialState: IToolboxState = {
   [MENU_ITEMS.UNDO]: {},
   [MENU_ITEMS.REDO]: {},
   [MENU_ITEMS.DOWNLOAD]: {},
+  [MENU_ITEMS.CLEAR]: {},
 }
 
 export const toolboxSlice = createSlice({
