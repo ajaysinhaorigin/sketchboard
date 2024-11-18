@@ -87,6 +87,18 @@ const Board = () => {
     canvas.width = window.innerWidth
     canvas.height = window.innerHeight
 
+    const getCoordinates = (
+      e: MouseEvent | TouchEvent
+    ): { x: number; y: number } => {
+      if (e instanceof MouseEvent) {
+        return { x: e.clientX, y: e.clientY }
+      } else if (e instanceof TouchEvent) {
+        const touch = e.touches[0] || e.changedTouches[0]
+        return { x: touch.clientX, y: touch.clientY }
+      }
+      return { x: 0, y: 0 } // Fallback
+    }
+
     const beginPath = (x: number, y: number) => {
       context.beginPath()
       context.moveTo(x, y)
@@ -96,15 +108,20 @@ const Board = () => {
       context.stroke()
     }
 
-    const handleMouseDown = (e: any) => {
+    const handleStart = (e: MouseEvent | TouchEvent) => {
+      e.preventDefault() // Prevent unintended browser behaviors
       shouldDraw.current = true
-      beginPath(e.clientX, e.clientY)
+      const { x, y } = getCoordinates(e)
+      beginPath(x, y)
     }
-    const handleMouseMove = (e: any) => {
+
+    const handleMove = (e: MouseEvent | TouchEvent) => {
       if (!shouldDraw.current) return
-      drawline(e.clientX, e.clientY)
+      const { x, y } = getCoordinates(e)
+      drawline(x, y)
     }
-    const handleMouseUp = () => {
+
+    const handleEnd = () => {
       shouldDraw.current = false
       const imageData: ImageData = context.getImageData(
         0,
@@ -116,22 +133,22 @@ const Board = () => {
       historyPointer.current = drawHistory.current.length - 1
     }
 
-    canvas.addEventListener("mousedown", handleMouseDown)
-    canvas.addEventListener("mousemove", handleMouseMove)
-    canvas.addEventListener("mouseup", handleMouseUp)
+    canvas.addEventListener("mousedown", handleStart)
+    canvas.addEventListener("mousemove", handleMove)
+    canvas.addEventListener("mouseup", handleEnd)
 
-    canvas.addEventListener("touchstart", handleMouseDown)
-    canvas.addEventListener("touchmove", handleMouseMove)
-    canvas.addEventListener("touchend", handleMouseUp)
+    canvas.addEventListener("touchstart", handleStart)
+    canvas.addEventListener("touchmove", handleMove)
+    canvas.addEventListener("touchend", handleEnd)
 
     return () => {
-      canvas.removeEventListener("mousedown", handleMouseDown)
-      canvas.removeEventListener("mousemove", handleMouseMove)
-      canvas.removeEventListener("mouseup", handleMouseUp)
+      canvas.removeEventListener("mousedown", handleStart)
+      canvas.removeEventListener("mousemove", handleMove)
+      canvas.removeEventListener("mouseup", handleEnd)
 
-      canvas.removeEventListener("touchstart", handleMouseDown)
-      canvas.removeEventListener("touchmove", handleMouseMove)
-      canvas.removeEventListener("touchend", handleMouseUp)
+      canvas.removeEventListener("touchstart", handleStart)
+      canvas.removeEventListener("touchmove", handleMove)
+      canvas.removeEventListener("touchend", handleEnd)
     }
   }, [])
 
