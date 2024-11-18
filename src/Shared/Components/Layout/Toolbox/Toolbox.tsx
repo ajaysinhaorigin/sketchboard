@@ -1,12 +1,12 @@
 "use client"
-import { COLORS, MENU_ITEMS } from "@/Shared/Constants"
+import { ChangeEvent } from "react"
 import styles from "./Toolbox.module.css"
 import classes from "classnames"
 import { useDispatch, useSelector } from "react-redux"
 import { changeBrushSize, changeColor } from "@/Shared/Slice"
-import { ChangeEvent } from "react"
 import { RootState } from "@/Shared/Stores/store"
 import { IToolboxState } from "@/Shared/Interfaces"
+import { COLORS, MENU_ITEMS } from "@/Shared/Constants"
 
 const Toolbox = () => {
   const dispatch = useDispatch()
@@ -21,14 +21,12 @@ const Toolbox = () => {
   )
 
   const updateBrushSize = (e: ChangeEvent<HTMLInputElement>) => {
-    console.log("e.target.value", e.target.value)
     dispatch(
       changeBrushSize({
         item: activeMenuItem as keyof IToolboxState,
         size: Number(e.target.value),
       })
     )
-    // socket.emit('changeConfig', {color, size: e.target.value })
   }
 
   const updateColor = (newColor: string) => {
@@ -38,7 +36,6 @@ const Toolbox = () => {
         color: newColor,
       })
     )
-    // socket.emit('changeConfig', {color: newColor, size })
   }
 
   return (

@@ -1,27 +1,29 @@
 "use client"
 import { COLORS, MENU_ITEMS } from "@/Shared/Constants"
+import { IToolboxState } from "@/Shared/Interfaces"
 import { actionItemClick } from "@/Shared/Slice"
+import { RootState } from "@/Shared/Stores/store"
 import { MutableRefObject, useEffect, useLayoutEffect, useRef } from "react"
 import { useDispatch, useSelector } from "react-redux"
 
 const Board = () => {
   const dispatch = useDispatch()
-  const canvasRef: any = useRef(null)
+  const canvasRef: MutableRefObject<HTMLCanvasElement | null> = useRef(null)
   const drawHistory: MutableRefObject<ImageData[]> = useRef([])
   const historyPointer = useRef(0)
 
   const shouldDraw = useRef(false)
   const { activeMenuItem, actionMenuItem } = useSelector(
-    (state: any) => state.menu
+    (state: RootState) => state.menu
   )
   const { color, size } = useSelector(
-    (state: any) => state.toolbox[activeMenuItem]
+    (state: RootState) => state.toolbox[activeMenuItem as keyof IToolboxState]
   )
 
   useEffect(() => {
     if (!canvasRef.current) return
     const canvas = canvasRef.current
-    const context = canvas.getContext("2d")
+    const context = canvas.getContext("2d") as CanvasRenderingContext2D
 
     if (actionMenuItem === MENU_ITEMS.DOWNLOAD) {
       const tempCanvas = document.createElement("canvas")
@@ -66,7 +68,7 @@ const Board = () => {
   useEffect(() => {
     if (!canvasRef.current) return
     const canvas = canvasRef.current
-    const context = canvas.getContext("2d")
+    const context = canvas.getContext("2d") as CanvasRenderingContext2D
 
     const changeConfig = () => {
       context.strokeStyle = color
@@ -80,25 +82,25 @@ const Board = () => {
   useLayoutEffect(() => {
     if (!canvasRef.current) return
     const canvas = canvasRef.current
-    const context = canvas.getContext("2d")
+    const context = canvas.getContext("2d") as CanvasRenderingContext2D
 
     canvas.width = window.innerWidth
     canvas.height = window.innerHeight
 
-    const beginPath = (x: any, y: any) => {
+    const beginPath = (x: number, y: number) => {
       context.beginPath()
       context.moveTo(x, y)
     }
-    const drawline = (x: any, y: any) => {
+    const drawline = (x: number, y: number) => {
       context.lineTo(x, y)
       context.stroke()
     }
 
-    const handleMouseDown = (e: any) => {
+    const handleMouseDown = (e: MouseEvent) => {
       shouldDraw.current = true
       beginPath(e.clientX, e.clientY)
     }
-    const handleMouseMove = (e: any) => {
+    const handleMouseMove = (e: MouseEvent) => {
       if (!shouldDraw.current) return
       drawline(e.clientX, e.clientY)
     }
@@ -110,7 +112,6 @@ const Board = () => {
         canvas.width,
         canvas.height
       )
-      console.log("imageData", imageData)
       drawHistory.current.push(imageData)
       historyPointer.current = drawHistory.current.length - 1
     }
