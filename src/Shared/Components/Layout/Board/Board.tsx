@@ -96,11 +96,11 @@ const Board = () => {
       context.stroke()
     }
 
-    const handleMouseDown = (e: MouseEvent) => {
+    const handleMouseDown = (e: any) => {
       shouldDraw.current = true
       beginPath(e.clientX, e.clientY)
     }
-    const handleMouseMove = (e: MouseEvent) => {
+    const handleMouseMove = (e: any) => {
       if (!shouldDraw.current) return
       drawline(e.clientX, e.clientY)
     }
@@ -120,10 +120,18 @@ const Board = () => {
     canvas.addEventListener("mousemove", handleMouseMove)
     canvas.addEventListener("mouseup", handleMouseUp)
 
+    canvas.addEventListener("touchstart", handleMouseDown)
+    canvas.addEventListener("touchmove", handleMouseMove)
+    canvas.addEventListener("touchend", handleMouseUp)
+
     return () => {
       canvas.removeEventListener("mousedown", handleMouseDown)
       canvas.removeEventListener("mousemove", handleMouseMove)
       canvas.removeEventListener("mouseup", handleMouseUp)
+
+      canvas.removeEventListener("touchstart", handleMouseDown)
+      canvas.removeEventListener("touchmove", handleMouseMove)
+      canvas.removeEventListener("touchend", handleMouseUp)
     }
   }, [])
 
