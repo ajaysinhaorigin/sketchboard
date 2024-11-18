@@ -61,6 +61,8 @@ const Board = () => {
       const imageData = drawHistory.current[historyPointer.current]
       if (!imageData || Boolean(!drawHistory.current)) return
       context.putImageData(imageData, 0, 0)
+    } else if (actionMenuItem === MENU_ITEMS.CLEAR) {
+      context.clearRect(0, 0, canvas.width, canvas.height)
     }
     dispatch(actionItemClick(null))
   }, [actionMenuItem, dispatch])

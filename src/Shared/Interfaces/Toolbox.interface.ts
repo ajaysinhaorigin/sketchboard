@@ -12,4 +12,5 @@ export interface IToolboxState {
   [MENU_ITEMS.UNDO]: Record<string, never>
   [MENU_ITEMS.REDO]: Record<string, never>
   [MENU_ITEMS.DOWNLOAD]: Record<string, never>
+  [MENU_ITEMS.CLEAR]: Record<string, never>
 }
